@@ -3,7 +3,7 @@ package fr.lteconsulting.activity;
 /**
  * Execution callback from an Activity
  */
-public interface IActivityCallback
+public interface IActivityCallback<R>
 {
 	/**
 	 * Activity has been cancelled
@@ -15,7 +15,7 @@ public interface IActivityCallback
 	 * 
 	 * @param result The value resulting of the activity
 	 */
-	void onResult( Object result );
+	void onResult( R result );
 
 	/**
 	 * Activity stopped because of an uncontroller error

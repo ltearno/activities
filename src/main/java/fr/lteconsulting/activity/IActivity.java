@@ -5,7 +5,7 @@ package fr.lteconsulting.activity;
  * 
  * @author Arnaud Tournier
  */
-public interface IActivity
+public interface IActivity<P, R>
 {
 	/**
 	 * The implementation should start its activity.
@@ -23,7 +23,7 @@ public interface IActivity
 	 * @param context
 	 *            Activity's access to its external world
 	 */
-	void start( IActivityContext context );
+	void start( IActivityContext<P, R> context );
 
 	/**
 	 * The implementation is asked to close itself.

@@ -1,4 +1,4 @@
-package fr.lteconsulting.activity.demo;
+package fr.lteconsulting.activity.demo.activity;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,11 +12,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import fr.lteconsulting.activity.IActivity;
 import fr.lteconsulting.activity.IActivityClosingProcess;
 import fr.lteconsulting.activity.IActivityContext;
+import fr.lteconsulting.activity.demo.Utils;
 
 /**
  * A base class for creating a previous next activity
  */
-public abstract class PreviousNextActivity implements IActivity
+public abstract class PreviousNextActivity<P, R> implements IActivity<P, R>
 {
 	public enum ReturnValue
 	{
@@ -33,7 +34,7 @@ public abstract class PreviousNextActivity implements IActivity
 
 	protected abstract void onPrevious();
 
-	private IActivityContext context;
+	private IActivityContext<P, R> context;
 
 	private final View view;
 
@@ -61,7 +62,7 @@ public abstract class PreviousNextActivity implements IActivity
 	}
 
 	@Override
-	public void start( IActivityContext context )
+	public final void start( IActivityContext<P, R> context )
 	{
 		this.context = context;
 
@@ -71,9 +72,9 @@ public abstract class PreviousNextActivity implements IActivity
 	}
 
 	@Override
-	public void close( IActivityClosingProcess closingProcess )
+	public final void close( IActivityClosingProcess closingProcess )
 	{
-		context.exit();
+		Utils.standardConfirm( getContext(), closingProcess );
 	}
 
 	protected void setView( IsWidget view )
@@ -81,17 +82,7 @@ public abstract class PreviousNextActivity implements IActivity
 		this.view.setContent( view );
 	}
 
-	protected void previous()
-	{
-		context.exit( ReturnValue.PREVIOUS );
-	}
-
-	protected void next()
-	{
-		context.exit( ReturnValue.NEXT );
-	}
-	
-	protected IActivityContext getContext()
+	protected IActivityContext<P, R> getContext()
 	{
 		return context;
 	}

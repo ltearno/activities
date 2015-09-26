@@ -10,7 +10,7 @@ package fr.lteconsulting.activity;
  * @author Arnaud
  *
  */
-public interface IActivityContext extends IActivityStarter
+public interface IActivityContext<P, R> extends IActivityStarter
 {
 	/**
 	 * Obtains the activity's display container.
@@ -20,7 +20,7 @@ public interface IActivityContext extends IActivityStarter
 	/**
 	 * Obtains the parameter that was given to this activity
 	 */
-	Object getParameter();
+	P getParameter();
 
 	/**
 	 * Exits the activity with a return value.
@@ -29,7 +29,7 @@ public interface IActivityContext extends IActivityStarter
 	 * The activity is removed from its controller, and the activity's execution
 	 * callback which was set by the activity caller is called.
 	 */
-	void exit( Object result );
+	void exit( R result );
 
 	/**
 	 * Exits the activity by cancelling it.

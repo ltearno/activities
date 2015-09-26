@@ -8,4 +8,5 @@ import fr.lteconsulting.activity.IActivityStarter;
  */
 public interface IActivityController extends IActivityStarter
 {
+	void closeAll();
 }

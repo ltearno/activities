@@ -5,6 +5,7 @@ import java.util.List;
 
 import fr.lteconsulting.activity.IActivity;
 import fr.lteconsulting.activity.IActivityCallback;
+import fr.lteconsulting.activity.IActivityClosingProcess;
 import fr.lteconsulting.activity.IActivityContext;
 import fr.lteconsulting.activity.IActivityDisplay;
 import fr.lteconsulting.activity.controller.IActivityController;
@@ -12,7 +13,7 @@ import fr.lteconsulting.activity.controller.IActivityControllerDisplay;
 
 public class ActivityController implements IActivityController
 {
-	private final List<ActivityContext> activities = new ArrayList<>();
+	private final List<ActivityContext<?, ?>> activities = new ArrayList<>();
 
 	private final IActivityControllerDisplay display;
 
@@ -27,23 +28,56 @@ public class ActivityController implements IActivityController
 	}
 
 	@Override
-	public void start( IActivity activity, Object parameter, IActivityCallback callback )
+	public <P, R> void start( IActivity<P, R> activity, P parameter, IActivityCallback<R> callback )
 	{
-		ActivityContext info = new ActivityContext( activity, parameter, callback );
+		ActivityContext<P, R> info = new ActivityContext<>( activity, parameter, callback );
 		activities.add( info );
 
 		info.startPanel();
 	}
-
-	private class ActivityContext implements IActivityContext
+	
+	@Override
+	public void closeAll()
 	{
-		final IActivity activity;
-		final Object parameter;
-		final IActivityCallback callback;
+		if( closingProcess != null )
+			closingProcess.abort();
+		
+		closingProcess = new ClosingProcess();
+		
+		closingProcess.go();
+	}
+	
+	private ClosingProcess closingProcess;
+
+	private class ClosingProcess implements IActivityClosingProcess
+	{
+		void go()
+		{
+			if( activities.isEmpty() )
+			{
+				abort();
+				return;
+			}
+			
+			activities.get( activities.size() - 1 ).activity.close( this );
+		}
+		
+		@Override
+		public void abort()
+		{
+			closingProcess = null;
+		}
+	}
+	
+	private class ActivityContext<P, R> implements IActivityContext<P, R>
+	{
+		final IActivity<P, R> activity;
+		final P parameter;
+		final IActivityCallback<R> callback;
 
 		IActivityDisplay display;
 		
-		ActivityContext( IActivity activiy, Object parameter, IActivityCallback callback )
+		ActivityContext( IActivity<P, R> activiy, P parameter, IActivityCallback<R> callback )
 		{
 			this.activity = activiy;
 			this.parameter = parameter;
@@ -69,7 +103,7 @@ public class ActivityController implements IActivityController
 		}
 		
 		@Override
-		public Object getParameter()
+		public P getParameter()
 		{
 			return parameter;
 		}
@@ -87,6 +121,9 @@ public class ActivityController implements IActivityController
 
 			if( callback != null )
 				callback.onCancel();
+			
+			if( closingProcess != null )
+				closingProcess.go();
 		}
 
 		@Override
@@ -102,10 +139,13 @@ public class ActivityController implements IActivityController
 
 			if( callback != null )
 				callback.onError( throwable );
+			
+			if( closingProcess != null )
+				closingProcess.go();
 		}
 
 		@Override
-		public void exit( Object result )
+		public void exit( R result )
 		{
 			if( display != null )
 			{
@@ -117,10 +157,13 @@ public class ActivityController implements IActivityController
 
 			if( callback != null )
 				callback.onResult( result );
+			
+			if( closingProcess != null )
+				closingProcess.go();
 		}
 		
 		@Override
-		public void start( IActivity activity, Object parameter, IActivityCallback callback )
+		public <PP, RR> void start( IActivity<PP, RR> activity, PP parameter, IActivityCallback<RR> callback )
 		{
 			ActivityController.this.start( activity, parameter, callback );
 		}
