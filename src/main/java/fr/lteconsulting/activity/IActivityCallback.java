@@ -2,6 +2,8 @@ package fr.lteconsulting.activity;
 
 /**
  * Execution callback from an Activity
+ * 
+ * @param R Activity result type
  */
 public interface IActivityCallback<R>
 {

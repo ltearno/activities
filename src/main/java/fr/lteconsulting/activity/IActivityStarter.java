@@ -13,5 +13,5 @@ public interface IActivityStarter
 	 * @param activity The activity to be started.
 	 * @param callback A callback to receive the activity's exit state. Can be <code>null</code>
 	 */
-	<P, R> void start( IActivity<P, R> activity, P parameter, IActivityCallback<R> callback );
+	<P, R> IActivityHandle<P, R> start( IActivity<P, R> activity, P parameter, IActivityCallback<R> callback );
 }

@@ -8,6 +8,7 @@ import fr.lteconsulting.activity.IActivityCallback;
 import fr.lteconsulting.activity.IActivityClosingProcess;
 import fr.lteconsulting.activity.IActivityContext;
 import fr.lteconsulting.activity.IActivityDisplay;
+import fr.lteconsulting.activity.IActivityHandle;
 import fr.lteconsulting.activity.controller.IActivityController;
 import fr.lteconsulting.activity.controller.IActivityControllerDisplay;
 
@@ -28,12 +29,14 @@ public class ActivityController implements IActivityController
 	}
 
 	@Override
-	public <P, R> void start( IActivity<P, R> activity, P parameter, IActivityCallback<R> callback )
+	public <P, R> IActivityHandle<P, R> start( IActivity<P, R> activity, P parameter, IActivityCallback<R> callback )
 	{
 		ActivityContext<P, R> info = new ActivityContext<>( activity, parameter, callback );
 		activities.add( info );
 
 		info.startPanel();
+		
+		return info;
 	}
 	
 	@Override
@@ -69,7 +72,7 @@ public class ActivityController implements IActivityController
 		}
 	}
 	
-	private class ActivityContext<P, R> implements IActivityContext<P, R>
+	private class ActivityContext<P, R> implements IActivityContext<P, R>, IActivityHandle<P, R>
 	{
 		final IActivity<P, R> activity;
 		final P parameter;
@@ -96,14 +99,14 @@ public class ActivityController implements IActivityController
 		}
 
 		@Override
-		public IActivityDisplay getDisplay()
+		public IActivityDisplay display()
 		{
 			ensureDisplay();
 			return display;
 		}
 		
 		@Override
-		public P getParameter()
+		public P parameter()
 		{
 			return parameter;
 		}
@@ -113,7 +116,7 @@ public class ActivityController implements IActivityController
 		{
 			if( display != null )
 			{
-				display.setView( null );
+				display.show( null );
 				display = null;
 			}
 			
@@ -131,7 +134,7 @@ public class ActivityController implements IActivityController
 		{
 			if( display != null )
 			{
-				display.setView( null );
+				display.show( null );
 				display = null;
 			}
 			
@@ -149,7 +152,7 @@ public class ActivityController implements IActivityController
 		{
 			if( display != null )
 			{
-				display.setView( null );
+				display.show( null );
 				display = null;
 			}
 			
@@ -163,9 +166,9 @@ public class ActivityController implements IActivityController
 		}
 		
 		@Override
-		public <PP, RR> void start( IActivity<PP, RR> activity, PP parameter, IActivityCallback<RR> callback )
+		public <PP, RR> IActivityHandle<PP,RR> start( IActivity<PP, RR> activity, PP parameter, IActivityCallback<RR> callback )
 		{
-			ActivityController.this.start( activity, parameter, callback );
+			return ActivityController.this.start( activity, parameter, callback );
 		}
 	}
 }

@@ -3,7 +3,10 @@ package fr.lteconsulting.activity;
 /**
  * Activities are accessed by the controller through this interface
  * 
- * @author Arnaud Tournier
+ * @param P
+ *            Activity Parameter type
+ * @param R
+ *            Activity Result type
  */
 public interface IActivity<P, R>
 {

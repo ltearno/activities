@@ -21,7 +21,7 @@ public interface IActivityDisplay
 	 * view was already displayed, it is removed.
 	 * @param view
 	 */
-	void setView( IsWidget view );
+	void show( IsWidget view );
 
 	/**
 	 * Sets the activity's view display mode.

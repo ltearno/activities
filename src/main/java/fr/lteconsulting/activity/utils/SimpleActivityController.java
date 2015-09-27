@@ -4,7 +4,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * A basic activity controller with a default display.
+ * A basic activity controller with a default display layout.
  */
 public class SimpleActivityController extends ActivityController implements IsWidget
 {

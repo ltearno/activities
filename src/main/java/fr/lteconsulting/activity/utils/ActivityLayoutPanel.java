@@ -32,7 +32,7 @@ public class ActivityLayoutPanel implements IActivityControllerDisplay
 		
 		public ActivityDisplay()
 		{
-			setDisplayMode( ActivityDisplayMode.FULL );
+			setDisplayMode( ActivityDisplayMode.Full );
 		}
 
 		@Override
@@ -44,7 +44,7 @@ public class ActivityLayoutPanel implements IActivityControllerDisplay
 		}
 
 		@Override
-		public void setView( IsWidget view )
+		public void show( IsWidget view )
 		{
 			if( this.view == view )
 				return;
@@ -69,11 +69,11 @@ public class ActivityLayoutPanel implements IActivityControllerDisplay
 
 			switch( mode )
 			{
-				case FULL:
+				case Full:
 					panel.setWidgetTopBottom( view, 0, Unit.PX, 0, Unit.PX );
 					panel.setWidgetLeftRight( view, 0, Unit.PX, 0, Unit.PX );
 					break;
-				case DIALOG:
+				case Dialog:
 					panel.setWidgetTopBottom( view, 25, Unit.PCT, 25, Unit.PCT );
 					panel.setWidgetLeftRight( view, 25, Unit.PCT, 25, Unit.PCT );
 					break;

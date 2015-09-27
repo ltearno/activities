@@ -33,8 +33,8 @@ public class MenuActivity<T extends Enum<?>> extends PreviousNextActivity<T, T>
 	@Override
 	protected void onStart()
 	{
-		if( getContext().getParameter() != null )
-			radios.get( getContext().getParameter() ).setValue( true );
+		if( getContext().parameter() != null )
+			radios.get( getContext().parameter() ).setValue( true );
 
 		setView( panel );
 	}

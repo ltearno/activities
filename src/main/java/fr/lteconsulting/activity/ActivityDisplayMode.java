@@ -8,10 +8,10 @@ public enum ActivityDisplayMode
 	/**
 	 * Full screen mode
 	 */
-	FULL,
+	Full,
 	
 	/**
 	 * Dialog mode
 	 */
-	DIALOG;
+	Dialog;
 }

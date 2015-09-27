@@ -7,20 +7,22 @@ package fr.lteconsulting.activity;
  * This interface of which an instance is given at the starting time of an
  * activity, is used to manipulate the activity's display container and to exit.
  * 
- * @author Arnaud
- *
+ * @param P
+ *            Activity Parameter type
+ * @param R
+ *            Activity Result type
  */
 public interface IActivityContext<P, R> extends IActivityStarter
 {
 	/**
 	 * Obtains the activity's display container.
 	 */
-	IActivityDisplay getDisplay();
-	
+	IActivityDisplay display();
+
 	/**
 	 * Obtains the parameter that was given to this activity
 	 */
-	P getParameter();
+	P parameter();
 
 	/**
 	 * Exits the activity with a return value.

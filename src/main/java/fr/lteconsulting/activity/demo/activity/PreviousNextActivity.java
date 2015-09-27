@@ -66,7 +66,7 @@ public abstract class PreviousNextActivity<P, R> implements IActivity<P, R>
 	{
 		this.context = context;
 
-		context.getDisplay().setView( view );
+		context.display().show( view );
 
 		onStart();
 	}

@@ -1,5 +1,7 @@
 package fr.lteconsulting.activity.demo;
 
+import java.util.List;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -9,10 +11,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import fr.lteconsulting.activity.IActivity;
-import fr.lteconsulting.activity.IActivityCallback;
 import fr.lteconsulting.activity.IActivityClosingProcess;
 import fr.lteconsulting.activity.IActivityContext;
-import fr.lteconsulting.activity.demo.activity.MenuActivity;
+import fr.lteconsulting.activity.demo.Item.ItemListBuilder;
 import fr.lteconsulting.activity.demo.activity.PreviousNextActivity;
 import fr.lteconsulting.activity.utils.SimpleActivityController;
 import fr.lteconsulting.hexa.client.ui.UiBuilder;
@@ -25,6 +26,13 @@ import fr.lteconsulting.hexa.client.ui.UiBuilder;
  */
 public class Application implements EntryPoint
 {
+	public static List<Item> ITEMS = ItemListBuilder
+			.add( "change the keyboard", "got...." )
+			.and( "move the keyboard", "got...." )
+			.and( "dust the keyboard", "got...." )
+			.and( "go to work", "do awesome things..." )
+			.build();
+	
 	enum Response
 	{
 		Titi,
@@ -40,24 +48,26 @@ public class Application implements EntryPoint
 
 		RootLayoutPanel.get().add( ctrl );
 		
-		ctrl.start( new MenuActivity<Response>( Response.class ), Response.Pourquoi, new IActivityCallback<Response>()
-		{
-			@Override
-			public void onCancel()
-			{
-			}
-
-			@Override
-			public void onResult( Response result )
-			{
-				Window.alert( "Choose " + result.toString() );
-			}
-
-			@Override
-			public void onError( Throwable throwable )
-			{
-			}
-		} );
+//		ctrl.start( new MenuActivity<Response>( Response.class ), Response.Pourquoi, new IActivityCallback<Response>()
+//		{
+//			@Override
+//			public void onCancel()
+//			{
+//			}
+//
+//			@Override
+//			public void onResult( Response result )
+//			{
+//				Window.alert( "Choose " + result.toString() );
+//			}
+//
+//			@Override
+//			public void onError( Throwable throwable )
+//			{
+//			}
+//		} );
+		
+		ctrl.start( new WelcomeActivity(), null, null );
 		
 		//ctrl.start( new MyActivity(), "Salut !", null );
 		
@@ -109,7 +119,7 @@ class TotoActivity implements IActivity<Void, Integer>
 	{
 		this.context = context;
 
-		context.getDisplay().setView( UiBuilder.vert( new Label( "Welcome !" ), validate, exception, cancel ) );
+		context.display().show( UiBuilder.vert( new Label( "Welcome !" ), validate, exception, cancel ) );
 
 		validate.addClickHandler( new ClickHandler()
 		{
@@ -166,7 +176,7 @@ class MyActivity extends PreviousNextActivity<String, Void>
 	@Override
 	protected void onStart()
 	{
-		view.setText( "Hello " + getContext().getParameter() );
+		view.setText( "Hello " + getContext().parameter() );
 		setView( view );
 	}
 
